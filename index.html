@@ -8,5 +8,27 @@
 </head>
 <body>
   <h1>My File Uploader</h1>
+
+  File: <input type="file" id='file'>
+  <button id="btnUpload">Read & Upload</button>
+
+  <div id="divOutput"></div>
+
+  <script>
+    const btnUpload = document.getElementById("btnUpload")
+    const divOutput = document.getElementById("divOutput")
+    const f = document.getElementById("file")
+
+    btnUpload.addEventListener("click", () => {
+      
+      const fileReader = new FileReader();
+      const userFile = f.files[0];
+      fileReader.onload = e => {
+        console.log(e);
+      }
+      fileReader.readAsArrayBuffer(userFile);
+    })
+
+  </script>
 </body>
 </html>
