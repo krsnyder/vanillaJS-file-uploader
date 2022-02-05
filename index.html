@@ -23,8 +23,24 @@
       
       const fileReader = new FileReader();
       const userFile = f.files[0];
-      fileReader.onload = e => {
-        console.log(e);
+      fileReader.onload = async e => {
+        const CHUNK_SIZE = 1000;
+        const chunkCount = e.target.result.byteLength/CHUNK_SIZE;
+        console.log("Read successfully");
+        const fileName = Math.random() * 1000 + userFile.name
+        for ( let chunkId = 0; chunkId < chunkCount + 1; chunkId++){
+          const chunk = e.target.result.slice(chunkId * CHUNK_SIZE, chunkId * CHUNK_SIZE + CHUNK_SIZE);
+          await fetch("http://localhost:8080/upload", {
+            "method": "POST",
+            "headers": {
+              "content-type": "application/octet-stream",
+              "content-length": chunk.length,
+              "file-name": fileName
+            },
+            "body": chunk
+          })
+        }
+        console.log(e.target.result.byteLength);
       }
       fileReader.readAsArrayBuffer(userFile);
     })
